@@ -1,22 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import gravatar from '../utils/gravatar';
 import { logoutRequest } from '../actions';
 import '../assets/styles/components/Header.scss';
+import classNames from 'classnames';
 import logo from "../assets/static/logo-platzi-video-BW2.png";
 import userIcon from "../assets/static/user-icon.png";
 
 const Header = (props) => {
-  const {user} = props;
+  const { user } = props;
   const hasUser = Object.keys(user).length > 0;
+
+  const isGreen = props.location.pathname == '/login' || window.location.pathname == '/register'  
 
   const handleLogOut = () => {
     props.logoutRequest({});
   };
 
+  const headerStyles = classNames('header', {
+    isGreen
+  });
+  
   return(
-    <header className="header">
+    <header className={headerStyles}>
       <Link to="/">
         <img className="header__img" src={logo} alt="Platzi Video" />
       </Link>
@@ -51,4 +58,4 @@ const mapDispatchToProps = {
   logoutRequest
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
